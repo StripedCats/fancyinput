@@ -28,9 +28,12 @@ class _FancyInput extends State<FancyInput> {
 
   bool checkCondition(FancyInputCondition condition) =>
       condition == FancyInputCondition.alwaysShown || focused;
+  
+  bool hasPrefix() => widget.prefix != null && checkCondition(widget.prefixShowCondition);
+  bool hasSuffix() => widget.suffix != null && checkCondition(widget.prefixShowCondition);
 
   Widget _buildPrefix() {
-    if (widget.prefix == null || !checkCondition(widget.prefixShowCondition)) {
+    if (!hasPrefix()) {
       return const SizedBox();
     }
 
@@ -48,20 +51,30 @@ class _FancyInput extends State<FancyInput> {
   }
 
   Widget _buildSuffix() {
-    if (widget.suffix == null || !checkCondition(widget.suffixShowCondition)) {
+    if (!hasSuffix()) {
       return const SizedBox();
     }
 
     const divider = SizedBox(width: 8);
 
-    return Row(
-      children: [
-        divider,
-        widget.suffix!,
-        divider,
-      ],
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return InkWell(
+      child: SizedBox(
+        child: Row(
+          children: [
+            divider,
+            widget.suffix!,
+            const SizedBox(width: 24)
+          ],
+          
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        ),
+
+        height: double.infinity,
+      ),
+
+      onTap: widget.onSuffixTap,
+      enableFeedback: widget.onSuffixTap != null && widget.enableSuffixFeedback,
     );
   }
 
@@ -74,6 +87,16 @@ class _FancyInput extends State<FancyInput> {
   }
 
   Widget _build(BuildContext context) {
+    final padding = widget.padding ?? (
+      hasSuffix() ? const EdgeInsets.only(
+        top: 9, bottom: 9,
+        left: 16, right: 0
+      ) : const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 9
+      )
+    );
+
     return Container(
       child: Container(
         child: IntrinsicHeight(
@@ -116,7 +139,7 @@ class _FancyInput extends State<FancyInput> {
           color: const Color(0xff263238).withOpacity(0.38),
         ))),
         width: widget.width,
-        padding: widget.padding,
+        padding: padding,
       ),
       decoration: BoxDecoration(
         color: widget.background,
@@ -131,7 +154,7 @@ class FancyInput extends StatefulWidget {
   final Color? cursorColor;
   final Color? prefixDividerColor;
 
-  final EdgeInsets padding;
+  final EdgeInsets? padding;
   final EdgeInsets suffixPadding;
 
   /* `FancyInput`'s with, by default this field is double.infinity */
@@ -164,10 +187,15 @@ class FancyInput extends StatefulWidget {
   final void Function()? onTap;
   final void Function()? onEditingComplete;
 
+  final void Function()? onSuffixTap;
+  final bool enableSuffixFeedback;
+
+  /// vertical: 9, left: 16, right: 0
   const FancyInput({
     Key? key,
+    this.enableSuffixFeedback = true,
     this.background = const Color(0xffF0F0F0),
-    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+    this.padding,
     this.suffixPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.width = double.infinity,
     this.autofocus = false,
@@ -180,6 +208,7 @@ class FancyInput extends StatefulWidget {
     this.onChanged,
     this.onSubmitted,
     this.onEditingComplete,
+    this.onSuffixTap,
     this.formatters,
     this.prefixShowCondition = FancyInputCondition.alwaysShown,
     this.suffixShowCondition = FancyInputCondition.focused,

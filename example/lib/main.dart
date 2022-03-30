@@ -12,15 +12,17 @@ class ExampleInput extends StatelessWidget {
       ),
       body: Padding(
         child: Column(
-          children: const [
+          children: [
             FancyInput(
-              prefix: Text("void"),
-              suffix: Text("{}"),
+              prefix: const Text("void"),
+              suffix: const Text("{}"),
+
+              onSuffixTap: () => print("TAP"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            FancyInput(
+            const FancyInput(
               prefix: Text("Rust"),
               suffix: Text("!"),
             )
