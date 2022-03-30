@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-enum FancyInputCondition {
-  focused,
-  alwaysShown
-}
+enum FancyInputCondition { focused, alwaysShown }
 
 class _FancyInput extends State<FancyInput> {
   final node = FocusNode();
@@ -29,8 +26,8 @@ class _FancyInput extends State<FancyInput> {
     super.initState();
   }
 
-  bool checkCondition(FancyInputCondition condition)
-    => condition == FancyInputCondition.alwaysShown || focused;
+  bool checkCondition(FancyInputCondition condition) =>
+      condition == FancyInputCondition.alwaysShown || focused;
 
   Widget _buildPrefix() {
     if (widget.prefix == null || !checkCondition(widget.prefixShowCondition)) {
@@ -42,10 +39,7 @@ class _FancyInput extends State<FancyInput> {
 
     return Row(
       children: [
-        DefaultTextStyle(
-          style: widget.prefixStyle,
-          child: widget.prefix!
-        ),
+        DefaultTextStyle(style: widget.prefixStyle, child: widget.prefix!),
         divider,
         VerticalDivider(width: 0, color: color),
         divider,
@@ -66,7 +60,6 @@ class _FancyInput extends State<FancyInput> {
         widget.suffix!,
         divider,
       ],
-
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
     );
@@ -79,7 +72,7 @@ class _FancyInput extends State<FancyInput> {
       onTap: () => node.requestFocus(),
     );
   }
-  
+
   Widget _build(BuildContext context) {
     return Container(
       child: Container(
@@ -87,24 +80,19 @@ class _FancyInput extends State<FancyInput> {
           child: Row(
             children: [
               _buildPrefix(),
-
               Expanded(
                 child: Padding(
                   child: TextField(
                     focusNode: node,
                     cursorColor: widget.cursorColor,
-
                     inputFormatters: widget.formatters,
-
                     onEditingComplete: widget.onEditingComplete,
                     onChanged: widget.onChanged,
                     onSubmitted: widget.onSubmitted,
                     onTap: widget.onTap,
-
                     decoration: const InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
-
                       focusedBorder: InputBorder.none,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -113,31 +101,23 @@ class _FancyInput extends State<FancyInput> {
                       focusedErrorBorder: InputBorder.none,
                     ),
                     style: widget.contentStyle,
-
                     controller: controller,
                   ),
-
                   padding: const EdgeInsets.symmetric(vertical: 9),
                 ),
               ),
-
               _buildSuffix(),
             ],
           ),
         ),
         decoration: BoxDecoration(
-
-          border: Border(
-            bottom: BorderSide(
-              color: const Color(0xff263238).withOpacity(0.38),
-            )
-          )
-        ),
-
+            border: Border(
+                bottom: BorderSide(
+          color: const Color(0xff263238).withOpacity(0.38),
+        ))),
         width: widget.width,
         padding: widget.padding,
       ),
-
       decoration: BoxDecoration(
         color: widget.background,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
@@ -178,41 +158,32 @@ class FancyInput extends StatefulWidget {
 
   const FancyInput({
     Key? key,
-
     this.background = const Color(0xffF0F0F0),
     this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
     this.suffixPadding = const EdgeInsets.symmetric(horizontal: 8),
     this.width = double.infinity,
     this.autofocus = false,
-    
     this.controller,
     this.cursorColor,
     this.prefix,
     this.suffix,
     this.prefixDividerColor,
-
     this.onTap,
     this.onChanged,
     this.onSubmitted,
     this.onEditingComplete,
-
     this.formatters,
-
     this.prefixShowCondition = FancyInputCondition.alwaysShown,
     this.suffixShowCondition = FancyInputCondition.focused,
-
     this.prefixStyle = const TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: 16,
-      letterSpacing: 0.44,
-      color: Color(0xff868686)
-    ),
-
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        letterSpacing: 0.44,
+        color: Color(0xff868686)),
     this.contentStyle = const TextStyle(
       color: Color(0xff333333),
       fontSize: 16,
       fontWeight: FontWeight.w400,
-
       letterSpacing: 0.44,
     ),
   }) : super(key: key);
