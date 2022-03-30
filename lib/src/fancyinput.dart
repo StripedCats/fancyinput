@@ -30,7 +30,7 @@ class _FancyInput extends State<FancyInput> {
       condition == FancyInputCondition.alwaysShown || focused;
   
   bool hasPrefix() => widget.prefix != null && checkCondition(widget.prefixShowCondition);
-  bool hasSuffix() => widget.suffix != null && checkCondition(widget.prefixShowCondition);
+  bool hasSuffix() => widget.suffix != null && checkCondition(widget.suffixShowCondition);
 
   Widget _buildPrefix() {
     if (!hasPrefix()) {
