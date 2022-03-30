@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fancyinput/fancyinput.dart';
+import 'package:flutter_svg/svg.dart';
 
 
 class ExampleInput extends StatelessWidget {
@@ -12,12 +13,24 @@ class ExampleInput extends StatelessWidget {
         title: const Text("FancyInput test"),
       ),
 
-      body: const Padding(
-        child: FancyInput(
-          prefix: Text("+7"),
+      body: Padding(
+        child: Column(
+          children: const [
+            FancyInput(
+              prefix: Text("void"),
+              suffix: Text("{}"),
+            ),
+
+            SizedBox(height: 16,),
+
+            FancyInput(
+              prefix: Text("Rust"),
+              suffix: Text("!"),
+            )
+          ],
         ),
 
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       ),
     );
   }
