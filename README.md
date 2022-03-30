@@ -3,8 +3,8 @@ Fancy and easy customizable flutter textfield
 
 # Screenshots
 
-![Screenshot #1](images/1.png)
-![Screenshot #2](images/2.png)
+![Screenshot #1](images/0.png)
+![Screenshot #2](images/1.png)
 
 # Usage
 
