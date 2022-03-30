@@ -96,6 +96,7 @@ class _FancyInput extends State<FancyInput> {
               Expanded(
                 child: Padding(
                   child: TextField(
+                    autofocus: widget.autofocus,
                     focusNode: node,
                     cursorColor: widget.cursorColor,
                     inputFormatters: widget.formatters,
