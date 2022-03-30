@@ -4,7 +4,7 @@ Fancy and easy customizable flutter textfield
 # Screenshots
 
 ![Screenshot #1](images/unfocused.png)
-![Screenshot #2](images/focused1.png)
+![Screenshot #2](images/focused_cursor.png)
 
 # Usage
 
