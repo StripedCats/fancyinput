@@ -16,7 +16,6 @@ class ExampleInput extends StatelessWidget {
             FancyInput(
               prefix: const Text("void"),
               suffix: const Text("{}"),
-
               onSuffixTap: () => print("TAP"),
             ),
             const SizedBox(

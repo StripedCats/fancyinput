@@ -28,9 +28,11 @@ class _FancyInput extends State<FancyInput> {
 
   bool checkCondition(FancyInputCondition condition) =>
       condition == FancyInputCondition.alwaysShown || focused;
-  
-  bool hasPrefix() => widget.prefix != null && checkCondition(widget.prefixShowCondition);
-  bool hasSuffix() => widget.suffix != null && checkCondition(widget.suffixShowCondition);
+
+  bool hasPrefix() =>
+      widget.prefix != null && checkCondition(widget.prefixShowCondition);
+  bool hasSuffix() =>
+      widget.suffix != null && checkCondition(widget.suffixShowCondition);
 
   Widget _buildPrefix() {
     if (!hasPrefix()) {
@@ -60,19 +62,12 @@ class _FancyInput extends State<FancyInput> {
     return InkWell(
       child: SizedBox(
         child: Row(
-          children: [
-            divider,
-            widget.suffix!,
-            const SizedBox(width: 24)
-          ],
-          
+          children: [divider, widget.suffix!, const SizedBox(width: 24)],
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
         ),
-
         height: double.infinity,
       ),
-
       onTap: widget.onSuffixTap,
       enableFeedback: widget.onSuffixTap != null && widget.enableSuffixFeedback,
     );
@@ -87,15 +82,10 @@ class _FancyInput extends State<FancyInput> {
   }
 
   Widget _build(BuildContext context) {
-    final padding = widget.padding ?? (
-      hasSuffix() ? const EdgeInsets.only(
-        top: 9, bottom: 9,
-        left: 16, right: 0
-      ) : const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 9
-      )
-    );
+    final padding = widget.padding ??
+        (hasSuffix()
+            ? const EdgeInsets.only(top: 9, bottom: 9, left: 16, right: 0)
+            : const EdgeInsets.symmetric(horizontal: 16, vertical: 9));
 
     return Container(
       child: Container(
