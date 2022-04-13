@@ -1,1 +1,1 @@
-export "src/fancyinput.dart";
+export 'src/fancyinput.dart';

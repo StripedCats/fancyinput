@@ -1,40 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:fancyinput/fancyinput.dart';
 
-class ExampleInput extends StatelessWidget {
-  const ExampleInput({Key? key}) : super(key: key);
+import 'package:flutter_svg/flutter_svg.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: Example(),
+  ));
+}
+
+class Example extends StatelessWidget {
+  final TextEditingController controller1 = TextEditingController();
+  final TextEditingController controller2 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("FancyInput test"),
+        title: const Text("FancyInput example"),
       ),
+
       body: Padding(
         child: Column(
           children: [
             FancyInput(
-              prefix: const Text("void"),
-              suffix: const Text("{}"),
-              onSuffixTap: () => print("TAP"),
+              style: FancyInputStyle.iOS(),
+              prefix: const Text("+7"),
+              suffix: const Icon(Icons.clear),
+
+              controller: controller1,
+              onTap: () { controller1.text = ""; },
             ),
-            const SizedBox(
-              height: 16,
-            ),
-            const FancyInput(
-              prefix: Text("Rust"),
-              suffix: Text("!"),
+
+            const SizedBox(height: 16),
+            FancyInput(
+              style: FancyInputStyle.android(),
+              prefix: const Text("Test"),
+              suffix: const Icon(Icons.clear),
+
+              controller: controller2,
+              onTap: () { controller2.text = ""; },
             )
-          ],
+          ]
         ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        padding: const EdgeInsets.all(16),
       ),
+
+      backgroundColor: const Color(0xffFFFFFF),
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: ExampleInput(),
-  ));
 }
