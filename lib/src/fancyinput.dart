@@ -113,7 +113,7 @@ class _FancyInput extends State<FancyInput> {
                   inputFormatters: widget.formatters,
                   
                   onChanged: widget.onChanged,
-                  onSubmitted: widget.onChanged,
+                  onSubmitted: widget.onSubmitted,
                   onEditingComplete: widget.onEditingComplete,
 
                   cursorColor: style.cursorColor,
