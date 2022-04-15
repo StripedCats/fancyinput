@@ -228,7 +228,7 @@ class FancyInputStyle {
     this.prefixColor = const Color(0xff868686),
 
     this.dividerGap = const Size(12, 9),
-    this.dividerWeight = 1
+    this.dividerWeight = 2
   });
 
   FancyInputStyle.iOS({
