@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 class _FancyInput extends State<FancyInput> {
   late FocusNode node;
+  late TextEditingController controller;
 
   bool isSuffixShown()
       => widget.suffix != null && (widget.suffixShowCondition == IconShowCondition.always || node.hasFocus);
@@ -11,6 +12,7 @@ class _FancyInput extends State<FancyInput> {
   @override
   void initState() {
     node = widget.focusNode ?? FocusNode();
+    controller = widget.controller ?? TextEditingController();
 
     var lastValue = widget.autofocus;
     node.addListener(() {
@@ -44,7 +46,7 @@ class _FancyInput extends State<FancyInput> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
 
-      onTap: widget.onTap,
+      onTap: widget.onTap ?? () { controller.text = ""; },
     );
   }
 
@@ -107,7 +109,7 @@ class _FancyInput extends State<FancyInput> {
               Expanded(
                 child: TextField(
                   focusNode: node,
-                  controller: widget.controller,
+                  controller: controller,
                   autofocus: widget.autofocus,
 
                   inputFormatters: widget.formatters,
