@@ -138,7 +138,7 @@ class _FancyInput extends State<FancyInput> {
             border: Border(
               bottom: BorderSide(
                 color: style.underlineColor,
-                width: 0
+                width: 1
               )
             )
           ),
