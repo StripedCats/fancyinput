@@ -111,6 +111,7 @@ class _FancyInput extends State<FancyInput> {
                   autofocus: widget.autofocus,
 
                   inputFormatters: widget.formatters,
+                  keyboardType: widget.keyboardType,
                   
                   onChanged: widget.onChanged,
                   onSubmitted: widget.onSubmitted,
@@ -273,6 +274,9 @@ class FancyInput extends StatefulWidget {
   /* Input text formatters */
   final List<TextInputFormatter>? formatters;
 
+  /* Input keyboard type */
+  final TextInputType? keyboardType;
+
   /* Input callbacks */
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
@@ -300,6 +304,7 @@ class FancyInput extends StatefulWidget {
     this.onTap,
 
     this.formatters,
+    this.keyboardType,
 
     this.controller,
     this.focusNode,
