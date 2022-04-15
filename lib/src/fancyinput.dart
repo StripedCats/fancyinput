@@ -23,6 +23,8 @@ class _FancyInput extends State<FancyInput> {
       }
     });
 
+    controller.text = widget.initialValue ?? "";
+
     super.initState();
   }
 
@@ -280,6 +282,7 @@ class FancyInput extends StatefulWidget {
   final bool autofocus;
   final bool autocorrect;
 
+  final String? initialValue;
   final String? placeholder;
 
   final TextEditingController? controller;
@@ -323,6 +326,7 @@ class FancyInput extends StatefulWidget {
 
     this.controller,
     this.focusNode,
+    this.initialValue,
 
     this.autocorrect = false,
     this.autofocus = false,
