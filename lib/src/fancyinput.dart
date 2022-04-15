@@ -48,7 +48,12 @@ class _FancyInput extends State<FancyInput> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
 
-      onTap: widget.onTap ?? () { controller.text = ""; },
+      onTap: widget.onTap ?? () {
+        controller.text = "";
+        if (widget.onChanged != null) {
+          widget.onChanged!("");
+        }
+      },
     );
   }
 
