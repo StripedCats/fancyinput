@@ -123,6 +123,9 @@ class _FancyInput extends State<FancyInput> {
                     contentPadding: inputInsets,
                     isDense: true,
 
+                    hintText: widget.placeholder,
+                    hintStyle: style.contentStyle.copyWith(color: style.placeholderColor),
+
                     border: InputBorder.none
                   ),
 
@@ -170,6 +173,7 @@ class FancyInputStyle {
 
   final Color underlineColor;
   final Color dividerColor;
+  final Color placeholderColor;
   final Color background;
 
   final Color cursorColor;
@@ -200,6 +204,7 @@ class FancyInputStyle {
     required this.leftPrefixGap,
     required this.cursorColor,
 
+    required this.placeholderColor,
     required this.contentStyle,
     required this.iconSize,
 
@@ -213,6 +218,8 @@ class FancyInputStyle {
     this.underlineColor = const Color.fromRGBO(38, 50, 56, 0.36),
     this.dividerColor = const Color(0xffBEBEBE),
     this.cursorColor = Colors.blue,
+
+    this.placeholderColor = const Color(0xff868686),
 
     this.onlyTopRadius = true,
     this.includeDivider = true,
@@ -244,6 +251,8 @@ class FancyInputStyle {
     this.includeDivider = true,
     this.borderRadius = 18,
 
+    this.placeholderColor = const Color(0xff868686),
+
     this.contentStyle = const TextStyle(
       color: Color(0xff333333),
       fontSize: 24,
@@ -268,6 +277,8 @@ class FancyInput extends StatefulWidget {
 
   final bool autofocus;
   final bool autocorrect;
+
+  final String? placeholder;
 
   final TextEditingController? controller;
 
@@ -302,6 +313,8 @@ class FancyInput extends StatefulWidget {
     this.onSubmitted,
     this.onSuffixTap,
     this.onTap,
+
+    this.placeholder,
 
     this.formatters,
     this.keyboardType,

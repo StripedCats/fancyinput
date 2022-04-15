@@ -30,6 +30,8 @@ class Example extends StatelessWidget {
 
               controller: controller1,
               onTap: () { controller1.text = ""; },
+              keyboardType: TextInputType.number,
+              placeholder: "Hello iOS",
             ),
 
             const SizedBox(height: 16),
@@ -40,6 +42,8 @@ class Example extends StatelessWidget {
 
               controller: controller2,
               onTap: () { controller2.text = ""; },
+
+              placeholder: "Hello Android",
             )
           ]
         ),
