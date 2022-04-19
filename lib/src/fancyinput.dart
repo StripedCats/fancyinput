@@ -87,6 +87,7 @@ class _FancyInput extends State<FancyInput> {
     node = widget.focusNode ?? FocusNode();
     controller = widget.controller ?? TextEditingController();
 
+    showSuffix.value = widget.suffixShowCondition == IconShowCondition.always;
     if (widget.suffixShowCondition == IconShowCondition.focus) {
       node.addListener(() {
         // Add state checking to reduce number of updates
@@ -122,7 +123,6 @@ class _FancyInput extends State<FancyInput> {
       bottom: style.padding.bottom,
     );
     final showDivider = widget.prefix != null && style.includeDivider;
-    // final rightPadding = isSuffixShown() ? 0.0 : style.padding.right;
 
     return Container(
       child: IntrinsicHeight(
