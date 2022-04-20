@@ -68,6 +68,8 @@ class _InputSuffixState extends State<_InputSuffix>
         onTap: widget.onTap ??
             () {
               widget.controller.text = "";
+              widget.controller.selection =
+                  TextSelection.fromPosition(const TextPosition(offset: 0));
               if (widget.onChanged != null) {
                 widget.onChanged!("");
               }
@@ -81,6 +83,8 @@ class _FancyInput extends State<FancyInput> {
   late FocusNode node;
   late TextEditingController controller;
   final showSuffix = ValueNotifier<bool>(false);
+
+  final _key = UniqueKey();
 
   @override
   void initState() {
@@ -150,24 +154,29 @@ class _FancyInput extends State<FancyInput> {
               Expanded(
                 child: ValueListenableBuilder<bool>(
                   builder: (_, value, __) => TextField(
-                    focusNode: node,
-                    controller: controller,
                     autofocus: widget.autofocus,
+                    focusNode: node,
+                    cursorColor: style.cursorColor,
                     inputFormatters: widget.formatters,
-                    keyboardType: widget.keyboardType,
+                    onEditingComplete: widget.onEditingComplete,
                     onChanged: widget.onChanged,
                     onSubmitted: widget.onSubmitted,
-                    onEditingComplete: widget.onEditingComplete,
-                    cursorColor: style.cursorColor,
+                    onTap: widget.onTap,
+                    controller: controller,
                     decoration: InputDecoration(
-                        contentPadding: inputInsets.copyWith(
-                            left: style.padding.left,
-                            right: value ? 0.0 : style.padding.right),
-                        isDense: true,
-                        hintText: widget.placeholder,
-                        hintStyle: style.contentStyle
-                            .copyWith(color: style.placeholderColor),
-                        border: InputBorder.none),
+                      contentPadding: inputInsets.copyWith(
+                          left: style.padding.left,
+                          right: value ? 0.0 : style.padding.right),
+                      isDense: true,
+                      hintText: widget.placeholder,
+                      hintStyle: style.contentStyle
+                          .copyWith(color: style.placeholderColor),
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                    ),
                     style: style.contentStyle,
                     textAlignVertical: TextAlignVertical.center,
                   ),
@@ -178,6 +187,7 @@ class _FancyInput extends State<FancyInput> {
                 valueListenable: showSuffix,
                 builder: (_, value, __) => value
                     ? _InputSuffix(
+                        key: _key,
                         style: style,
                         suffix: widget.suffix,
                         enableSuffixFeedback: widget.enableSuffixFeedback,
