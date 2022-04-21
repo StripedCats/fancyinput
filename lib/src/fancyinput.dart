@@ -93,12 +93,7 @@ class _FancyInput extends State<FancyInput> {
 
     showSuffix.value = widget.suffixShowCondition == IconShowCondition.always;
     if (widget.suffixShowCondition == IconShowCondition.focus) {
-      node.addListener(() {
-        // Add state checking to reduce number of updates
-        if (node.hasFocus != showSuffix.value) {
-          showSuffix.value = node.hasFocus;
-        }
-      });
+      node.addListener(() => showSuffix.value = node.hasFocus);
     }
 
     controller.text = widget.initialValue ?? "";
@@ -163,6 +158,7 @@ class _FancyInput extends State<FancyInput> {
                     onSubmitted: widget.onSubmitted,
                     onTap: widget.onTap,
                     controller: controller,
+                    keyboardType: widget.keyboardType,
                     decoration: InputDecoration(
                       contentPadding: inputInsets.copyWith(
                           left: style.padding.left,
