@@ -50,31 +50,82 @@ class _InputSuffixState extends State<_InputSuffix>
 
     return FadeTransition(
       opacity: _animation,
-      child: InkWell(
-        child: SizedBox(
-          child: Container(
-            child: widget.suffix!,
-            alignment: Alignment.center,
-            width: style.iconSize.width,
-            height: style.iconSize.height,
-          ),
-          height: double.infinity,
-          width:
-              style.iconSize.width + style.padding.right + style.padding.left,
-        ),
-        enableFeedback: widget.enableSuffixFeedback,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: widget.onTap ??
-            () {
-              widget.controller.text = "";
-              widget.controller.selection =
-                  TextSelection.fromPosition(const TextPosition(offset: 0));
-              if (widget.onChanged != null) {
-                widget.onChanged!("");
-              }
-            },
+      child: _ClickableSuffixIcon(
+        enableSuffixFeedback: widget.enableSuffixFeedback, 
+        style: style, 
+        controller: widget.controller, 
+        onChanged: widget.onChanged, 
+        onTap: widget.onTap, 
+        suffix: widget.suffix
       ),
+    );
+  }
+}
+
+class _ClickableSuffixIcon extends StatelessWidget {
+  final bool enableSuffixFeedback;
+  final FancyInputStyle style;
+  final TextEditingController controller;
+  
+  final void Function()? onTap;
+  final void Function(String)? onChanged;
+
+  final Widget? suffix;
+
+  const _ClickableSuffixIcon({
+    Key? key,
+    required this.enableSuffixFeedback,
+    required this.style,
+    required this.controller,
+
+    required this.onChanged,
+    required this.onTap,
+
+    required this.suffix,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: _SuffixIcon(suffix: suffix, style: style),
+      enableFeedback: enableSuffixFeedback,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: onTap ??
+          () {
+            controller.text = "";
+            controller.selection =
+                TextSelection.fromPosition(const TextPosition(offset: 0));
+            if (onChanged != null) {
+              onChanged!("");
+            }
+          },
+    );
+  }
+}
+
+class _SuffixIcon extends StatelessWidget {
+  final Widget? suffix;
+  final FancyInputStyle style;
+
+  const _SuffixIcon({
+    Key? key,
+    required this.suffix,
+    required this.style,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Container(
+        child: suffix,
+        alignment: Alignment.center,
+        width: style.iconSize.width,
+        height: style.iconSize.height,
+      ),
+      height: double.infinity,
+      width:
+          style.iconSize.width + style.padding.right + style.padding.left,
     );
   }
 }
@@ -103,13 +154,6 @@ class _FancyInput extends State<FancyInput> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: _build(context),
-      onTap: () => node.requestFocus(),
-    );
-  }
-
-  Widget _build(BuildContext context) {
     final style = widget.style;
     final doubleRadius = style.borderRadius;
 
@@ -117,97 +161,156 @@ class _FancyInput extends State<FancyInput> {
     final bottomRadius =
         Radius.circular(style.onlyTopRadius ? 0 : doubleRadius);
 
-    var inputInsets = EdgeInsets.only(
+    final showDivider = widget.prefix != null && style.includeDivider;
+
+    return GestureDetector(
+      child: Container(
+        child: IntrinsicHeight(
+          child: Container(
+            child: Row(
+              children: [
+                if (widget.prefix != null)
+                  Container(
+                    child: DefaultTextStyle(
+                        child: widget.prefix!,
+                        style: style.contentStyle
+                            .copyWith(color: style.prefixColor)),
+                    margin: EdgeInsets.only(left: style.padding.left),
+                  ),
+                if (showDivider) SizedBox(width: style.padding.left),
+                if (showDivider)
+                  Padding(
+                    child: VerticalDivider(
+                      color: style.dividerColor,
+                      width: style.dividerWeight,
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(vertical: style.dividerGap.height),
+                  ),
+                Expanded(
+                  child: _PrefixListanble(
+                    style: style,
+                    node: node,
+                    controller: controller,
+                    onChanged: widget.onChanged,
+                    onEditingComplete: widget.onEditingComplete,
+                    onTap: widget.onTap,
+                    onSubmitted: widget.onSubmitted,
+                    keyboardType: widget.keyboardType,
+                    formatters: widget.formatters,
+                    placeholder: widget.placeholder,
+                    autofocus: widget.autofocus,
+                    showSuffix: showSuffix
+                  ),
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: showSuffix,
+                  builder: (_, value, __) => value
+                      ? _InputSuffix(
+                          key: _key,
+                          style: style,
+                          suffix: widget.suffix,
+                          enableSuffixFeedback: widget.enableSuffixFeedback,
+                          onTap: widget.onTap,
+                          controller: controller,
+                          onChanged: widget.onChanged,
+                          node: node,
+                        )
+                      : Container(),
+                )
+              ],
+            ),
+            decoration: BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(color: style.underlineColor, width: 1))),
+          ),
+        ),
+        decoration: BoxDecoration(
+            color: style.background,
+            borderRadius: BorderRadius.only(
+                topLeft: radius,
+                topRight: radius,
+                bottomLeft: bottomRadius,
+                bottomRight: bottomRadius)),
+      ),
+      onTap: () => node.requestFocus(),
+    );
+  }
+
+}
+
+class _PrefixListanble extends StatelessWidget {
+  final FancyInputStyle style;
+
+  final FocusNode node;
+  final TextEditingController controller;
+
+  final void Function(String)? onChanged;
+  final void Function()? onEditingComplete;
+  final void Function()? onTap;
+  final void Function(String)? onSubmitted;
+
+  final TextInputType? keyboardType;
+
+  final List<TextInputFormatter>? formatters;
+  final String? placeholder;
+  final bool autofocus;
+
+  final ValueNotifier<bool> showSuffix;
+
+  const _PrefixListanble({
+    Key? key,
+    required this.style,
+    required this.node,
+    required this.controller,
+    required this.onChanged,
+    required this.onEditingComplete,
+    required this.onTap,
+    required this.onSubmitted,
+    required this.keyboardType,
+    required this.formatters,
+    required this.placeholder,
+    required this.autofocus,
+    required this.showSuffix,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final inputInsets = EdgeInsets.only(
       top: style.padding.top,
       bottom: style.padding.bottom,
     );
-    final showDivider = widget.prefix != null && style.includeDivider;
 
-    return Container(
-      child: IntrinsicHeight(
-        child: Container(
-          child: Row(
-            children: [
-              if (widget.prefix != null)
-                Container(
-                  child: DefaultTextStyle(
-                      child: widget.prefix!,
-                      style: style.contentStyle
-                          .copyWith(color: style.prefixColor)),
-                  margin: EdgeInsets.only(left: style.padding.left),
-                ),
-              if (showDivider) SizedBox(width: style.padding.left),
-              if (showDivider)
-                Padding(
-                  child: VerticalDivider(
-                    color: style.dividerColor,
-                    width: style.dividerWeight,
-                  ),
-                  padding:
-                      EdgeInsets.symmetric(vertical: style.dividerGap.height),
-                ),
-              Expanded(
-                child: ValueListenableBuilder<bool>(
-                  builder: (_, value, __) => TextField(
-                    autofocus: widget.autofocus,
-                    focusNode: node,
-                    cursorColor: style.cursorColor,
-                    inputFormatters: widget.formatters,
-                    onEditingComplete: widget.onEditingComplete,
-                    onChanged: widget.onChanged,
-                    onSubmitted: widget.onSubmitted,
-                    onTap: widget.onTap,
-                    controller: controller,
-                    keyboardType: widget.keyboardType,
-                    decoration: InputDecoration(
-                      contentPadding: inputInsets.copyWith(
-                          left: style.padding.left,
-                          right: value ? 0.0 : style.padding.right),
-                      isDense: true,
-                      hintText: widget.placeholder,
-                      hintStyle: style.contentStyle
-                          .copyWith(color: style.placeholderColor),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
-                    ),
-                    style: style.contentStyle,
-                    textAlignVertical: TextAlignVertical.center,
-                  ),
-                  valueListenable: showSuffix,
-                ),
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: showSuffix,
-                builder: (_, value, __) => value
-                    ? _InputSuffix(
-                        key: _key,
-                        style: style,
-                        suffix: widget.suffix,
-                        enableSuffixFeedback: widget.enableSuffixFeedback,
-                        onTap: widget.onTap,
-                        controller: controller,
-                        onChanged: widget.onChanged,
-                        node: node,
-                      )
-                    : Container(),
-              )
-            ],
-          ),
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(color: style.underlineColor, width: 1))),
+    return ValueListenableBuilder<bool>(
+      builder: (_, value, __) => TextField(
+        autofocus: autofocus,
+        focusNode: node,
+        cursorColor: style.cursorColor,
+        inputFormatters: formatters,
+        onEditingComplete: onEditingComplete,
+        onChanged: onChanged,
+        onSubmitted: onSubmitted,
+        onTap: onTap,
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          contentPadding: inputInsets.copyWith(
+              left: style.padding.left,
+              right: value ? 0.0 : style.padding.right),
+          isDense: true,
+          hintText: placeholder,
+          hintStyle: style.contentStyle
+              .copyWith(color: style.placeholderColor),
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
         ),
+        style: style.contentStyle,
+        textAlignVertical: TextAlignVertical.center,
       ),
-      decoration: BoxDecoration(
-          color: style.background,
-          borderRadius: BorderRadius.only(
-              topLeft: radius,
-              topRight: radius,
-              bottomLeft: bottomRadius,
-              bottomRight: bottomRadius)),
+      valueListenable: showSuffix,
     );
   }
 }
