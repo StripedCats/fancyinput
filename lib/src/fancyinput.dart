@@ -127,6 +127,7 @@ class _FancyInput extends State<FancyInput> {
   void initState() {
     focusNode.addListener(_focusHandler);
     _showSuffix = ValueNotifier<bool>(isSuffixShown);
+    controller.text = widget.initialValue ?? "";
 
     super.initState();
   }
@@ -157,6 +158,7 @@ class FancyInput extends StatefulWidget {
   final TextInputType? keyboardType;
 
   final String? placeholder;
+  final String? initialValue;
 
   final Duration suffixFadeDuration;
 
@@ -175,6 +177,7 @@ class FancyInput extends StatefulWidget {
       this.suffixShowCondition = IconShowCondition.focused,
       this.formatters = const [],
       this.focusNode,
+      this.initialValue,
       this.prefix,
       this.keyboardType,
       this.suffix,
