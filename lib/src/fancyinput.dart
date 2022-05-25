@@ -60,6 +60,7 @@ class _FancyInput extends State<FancyInput> {
                   child: TextField(
                     autofocus: widget.autofocus,
                     focusNode: focusNode,
+                    enabled: widget.enabled,
                     controller: controller,
                     onChanged: widget.onChanged,
                     inputFormatters: widget.formatters,
@@ -151,6 +152,7 @@ class FancyInput extends StatefulWidget {
 
   final bool autofocus;
   final bool enableSuffixFeedback;
+  final bool enabled;
 
   final Widget? prefix;
   final Widget? suffix;
@@ -173,6 +175,7 @@ class FancyInput extends StatefulWidget {
   const FancyInput(
       {Key? key,
       this.style,
+      this.enabled = true,
       this.autofocus = false,
       this.suffixShowCondition = IconShowCondition.focused,
       this.formatters = const [],
