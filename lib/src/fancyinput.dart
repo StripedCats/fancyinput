@@ -14,9 +14,8 @@ class _FancyInput extends State<FancyInput> {
   @override
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.vertical(
-      top: Radius.circular(style.topBorderRadius),
-      bottom: Radius.circular(style.bottomBorderRadius)
-    );
+        top: Radius.circular(style.topBorderRadius),
+        bottom: Radius.circular(style.bottomBorderRadius));
     const border = InputBorder.none;
 
     return GestureDetector(
@@ -26,50 +25,45 @@ class _FancyInput extends State<FancyInput> {
           color: style.backgroundColor,
         ),
         child: Container(
-          decoration: style.includeUnderline ? BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: style.underlineColor,
-              )
-            )
-          ) : null,
+          decoration: style.includeUnderline
+              ? BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                  color: style.underlineColor,
+                )))
+              : null,
           padding: EdgeInsets.zero,
-
           child: IntrinsicHeight(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
-
               children: [
                 SizedBox(width: style.padding.left),
-                if (widget.prefix != null)
-                  ...[
-                    DefaultTextStyle(
-                      style: style.prefixStyle,
-                      textAlign: TextAlign.left,
-                      child: widget.prefix!,
+                if (widget.prefix != null) ...[
+                  DefaultTextStyle(
+                    style: style.prefixStyle,
+                    textAlign: TextAlign.left,
+                    child: widget.prefix!,
+                  ),
+                  const SizedBox(width: 12),
+                  if (style.includeDivider) ...[
+                    Container(
+                      height: double.infinity,
+                      width: 1.0,
+                      color: const Color.fromRGBO(134, 134, 134, 1.0),
+                      margin: EdgeInsets.symmetric(vertical: style.dividerGap),
                     ),
-
                     const SizedBox(width: 12),
-                    if (style.includeDivider)
-                      ...[
-                        Container(
-                          height: double.infinity,
-                          width: 1.0,
-                          color: const Color.fromRGBO(
-                            134, 134, 134, 1.0),
-                          margin: EdgeInsets.symmetric(
-                            vertical: style.dividerGap),
-                        ),
-                        const SizedBox(width: 12),
-                      ]
-                  ],
+                  ]
+                ],
                 Expanded(
                   child: TextField(
                     autofocus: widget.autofocus,
                     focusNode: focusNode,
                     controller: controller,
                     onChanged: widget.onChanged,
+                    inputFormatters: widget.formatters,
+                    keyboardType: widget.keyboardType,
                     onEditingComplete: widget.onEditingCompleted,
                     onSubmitted: widget.onCompleted,
                     decoration: InputDecoration(
@@ -81,10 +75,7 @@ class _FancyInput extends State<FancyInput> {
                       focusedErrorBorder: border,
                       isDense: true,
                       contentPadding: EdgeInsets.only(
-                        top: style.padding.top,
-                        bottom: style.padding.bottom
-                      ),
-
+                          top: style.padding.top, bottom: style.padding.bottom),
                       hintMaxLines: 1,
                       hintText: widget.placeholder,
                     ),
@@ -93,7 +84,6 @@ class _FancyInput extends State<FancyInput> {
                     style: style.contentStyle,
                   ),
                 ),
-
                 if (widget.suffix != null)
                   _MomentalCrossFade(
                     duration: widget.suffixFadeDuration,
@@ -104,7 +94,6 @@ class _FancyInput extends State<FancyInput> {
                       child: Container(
                         alignment: Alignment.center,
                         padding: const EdgeInsets.only(left: 5),
-
                         margin: const EdgeInsets.only(right: 16),
                         child: widget.suffix!,
                       ),
@@ -116,7 +105,6 @@ class _FancyInput extends State<FancyInput> {
           ),
         ),
       ),
-
       onTap: () => focusNode.requestFocus(),
     );
   }
@@ -129,11 +117,11 @@ class _FancyInput extends State<FancyInput> {
     return const FancyInputStyle.iOS();
   }
 
-  bool get isSuffixShown
-      => focusNode.hasFocus || widget.suffixShowCondition == IconShowCondition.always;
+  bool get isSuffixShown =>
+      focusNode.hasFocus ||
+      widget.suffixShowCondition == IconShowCondition.always;
 
-  void _onSuffixTap()
-      => (widget.onSuffixTap ?? controller.clear)();
+  void _onSuffixTap() => (widget.onSuffixTap ?? controller.clear)();
 
   @override
   void initState() {
@@ -143,8 +131,7 @@ class _FancyInput extends State<FancyInput> {
     super.initState();
   }
 
-  void _focusHandler()
-      => _showSuffix.value = isSuffixShown;
+  void _focusHandler() => _showSuffix.value = isSuffixShown;
 
   @override
   void dispose() {
@@ -167,6 +154,8 @@ class FancyInput extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
 
+  final TextInputType? keyboardType;
+
   final String? placeholder;
 
   final Duration suffixFadeDuration;
@@ -179,27 +168,25 @@ class FancyInput extends StatefulWidget {
 
   final List<TextInputFormatter> formatters;
 
-  const FancyInput({
-    Key? key,
-    this.style,
-    this.autofocus = false,
-    this.suffixShowCondition = IconShowCondition.focused,
-    this.formatters = const [],
-    this.focusNode,
-
-    this.prefix,
-    this.suffix,
-
-    this.onChanged,
-    this.onCompleted,
-    this.onEditingCompleted,
-
-    this.placeholder,
-    this.onSuffixTap,
-    this.controller,
-    this.enableSuffixFeedback = true,
-    this.suffixFadeDuration = const Duration(milliseconds: 300)
-  }) : super(key: key);
+  const FancyInput(
+      {Key? key,
+      this.style,
+      this.autofocus = false,
+      this.suffixShowCondition = IconShowCondition.focused,
+      this.formatters = const [],
+      this.focusNode,
+      this.prefix,
+      this.keyboardType,
+      this.suffix,
+      this.onChanged,
+      this.onCompleted,
+      this.onEditingCompleted,
+      this.placeholder,
+      this.onSuffixTap,
+      this.controller,
+      this.enableSuffixFeedback = true,
+      this.suffixFadeDuration = const Duration(milliseconds: 300)})
+      : super(key: key);
 
   @override
   createState() => _FancyInput();
@@ -222,11 +209,9 @@ class _Clickable extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-
       enableFeedback: enableFeedback,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-
       canRequestFocus: false,
       child: child,
     );
@@ -234,34 +219,33 @@ class _Clickable extends StatelessWidget {
 }
 
 class _MomentalCrossFadeState extends State<_MomentalCrossFade>
-  with TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final controller = AnimationController(
     vsync: this,
     duration: widget.duration,
   );
-  late final animation = CurvedAnimation(
-    parent: controller, curve: Curves.linear);
-  
+  late final animation =
+      CurvedAnimation(parent: controller, curve: Curves.linear);
+
   final key = UniqueKey();
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: widget.valueNotifier,
-      builder: (_, value, __) {
-        if (value) {
-          controller.forward();
-        } else {
-          controller.reverse();
-        }
+        valueListenable: widget.valueNotifier,
+        builder: (_, value, __) {
+          if (value) {
+            controller.forward();
+          } else {
+            controller.reverse();
+          }
 
-        return FadeTransition(
-          opacity: animation,
-          key: key,
-          child: value ? widget.trueChild : widget.falseChild,
-        );
-      }
-    );
+          return FadeTransition(
+            opacity: animation,
+            key: key,
+            child: value ? widget.trueChild : widget.falseChild,
+          );
+        });
   }
 }
 
@@ -276,7 +260,6 @@ class _MomentalCrossFade extends StatefulWidget {
     Key? key,
     required this.duration,
     required this.valueNotifier,
-
     required this.trueChild,
     required this.falseChild,
   }) : super(key: key);
