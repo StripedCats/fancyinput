@@ -253,6 +253,13 @@ class _MomentalCrossFadeState extends State<_MomentalCrossFade>
           );
         });
   }
+  
+  @override
+  void dispose() {
+    animation.dispose();
+    controller.dispose();
+    super.dispose();
+  }
 }
 
 class _MomentalCrossFade extends StatefulWidget {
